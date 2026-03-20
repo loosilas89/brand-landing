@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#2A2A2A"/>
+  <rect x="2" y="2" width="796" height="596" fill="none" stroke="#141414" stroke-width="2" stroke-dasharray="12,6"/>
+  <text x="400" y="270" font-family="-apple-system,sans-serif" font-size="48" font-weight="700" fill="#141414" text-anchor="middle">PORTFOLIO 02</text>
+  <text x="400" y="340" font-family="-apple-system,sans-serif" font-size="22" fill="rgba(255,255,255,0.45)" text-anchor="middle">Client work · brand identity · logo showcase</text>
+  <text x="400" y="385" font-family="-apple-system,sans-serif" font-size="18" fill="rgba(255,255,255,0.25)" text-anchor="middle">Recommended: 800 × 600 · WebP or PNG</text>
+</svg>
