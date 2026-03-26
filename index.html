@@ -13,15 +13,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Flip.min.js"></script>
 
-  <!-- SF Pro system font stack (Apple) — no external request needed -->
+  <!-- Figtree font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            display: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"Helvetica Neue"', 'sans-serif'],
-            body:    ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"',    '"Helvetica Neue"', 'sans-serif'],
+            display: ['"Figtree"', 'sans-serif'],
+            body:    ['"Figtree"', 'sans-serif'],
           },
           colors: {
             accent: '#141414',
@@ -46,10 +49,10 @@
       --pad-section: clamp(5rem, 10vw, 9rem);
     }
 
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: auto; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       background: #fff;
       color: var(--ink);
       overflow-x: hidden;
@@ -67,7 +70,7 @@
     }
 
     .t-hero {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-size: clamp(2rem, 1.5rem + 2.75vw, 4rem);
       font-weight: 800;
       line-height: 1.03;
@@ -79,16 +82,16 @@
     }
 
     .t-h2 {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-      font-size: clamp(2rem, 1.25rem + 3vw, 3.75rem);
-      font-weight: 700;
-      line-height: 1.08;
-      letter-spacing: -0.025em;
+      font-family: "Figtree", sans-serif;
+      font-size: clamp(1.95rem, 1.3rem + 3.25vw, 4.55rem);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
       color: var(--ink);
     }
 
     .t-h3 {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-size: clamp(1.125rem, 0.9rem + 0.75vw, 1.375rem);
       font-weight: 700;
       letter-spacing: -0.01em;
@@ -125,7 +128,7 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-weight: 600;
       font-size: clamp(0.9375rem, 0.85rem + 0.25vw, 1rem);
       padding: clamp(0.875rem, 1.5vw, 1.0625rem) clamp(1.75rem, 3vw, 2.375rem);
@@ -288,6 +291,11 @@
       -webkit-backdrop-filter: saturate(180%) blur(20px);
       background: rgba(255,255,255,0.82);
       border-bottom: 1px solid rgba(0,0,0,0.07);
+      transform: translateY(0);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    nav.nav-hidden {
+      transform: translateY(-100%);
     }
     .nav-inner {
       display: flex;
@@ -296,8 +304,8 @@
       height: clamp(3.5rem, 5vw, 4rem);
     }
     .nav-logo {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-      font-weight: 800;
+      font-family: "Figtree", sans-serif;
+      font-weight: 400;
       font-size: clamp(1.0625rem, 0.9rem + 0.4vw, 1.25rem);
       letter-spacing: -0.02em;
       color: var(--ink);
@@ -306,15 +314,28 @@
     .nav-logo span { color: var(--accent); }
 
     /* ── Hero ── */
-    .hero-wrap {
-      padding-top: clamp(7rem, 10vw, 9rem);
-      padding-bottom: clamp(4rem, 7vw, 6rem);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(3rem, 6vw, 6rem);
-      align-items: center;
+    #hero {
+      padding: 0;
     }
-    .hero-text { display: flex; flex-direction: column; }
+    #hero .container {
+      background-image: url('hero.png');
+      background-size: cover;
+      background-position: center;
+      border-radius: 0;
+      overflow: hidden;
+      max-width: 100%;
+    }
+    .hero-wrap {
+      padding-top: clamp(8rem, 14vw, 12rem);
+      padding-bottom: clamp(6rem, 12vw, 10rem);
+      padding-left: clamp(2rem, 8vw, 8rem);
+      padding-right: clamp(2rem, 8vw, 8rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .hero-text { display: flex; flex-direction: column; align-items: center; }
     .hero-label {
       display: flex;
       align-items: center;
@@ -324,42 +345,13 @@
     .hero-label-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--accent);
+      background: #fff;
     }
-    /* Hero mosaic */
-    .hero-mosaic {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: clamp(0.625rem, 1.25vw, 0.875rem);
-      align-items: start;
-    }
-    .hero-mosaic-col {
-      display: flex;
-      flex-direction: column;
-      gap: clamp(0.625rem, 1.25vw, 0.875rem);
-    }
-    .hero-mosaic-col:nth-child(2) { margin-top: clamp(1.5rem, 3vw, 2.5rem); }
-    .hero-mosaic-img {
-      border-radius: clamp(0.75rem, 1.5vw, 1.125rem);
-      overflow: hidden;
-      background: var(--surface);
-    }
-    .hero-mosaic-img img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .hero-mosaic-img.tall  { aspect-ratio: 3 / 4; }
-    .hero-mosaic-img.short { aspect-ratio: 4 / 3; }
-    .hero-mosaic-img.sq    { aspect-ratio: 1 / 1; }
     @media (max-width: 768px) {
       .hero-wrap {
-        grid-template-columns: 1fr;
+        padding-left: clamp(1.5rem, 5vw, 3rem);
+        padding-right: clamp(1.5rem, 5vw, 3rem);
       }
-      .hero-mosaic {
-        grid-template-columns: 1fr 1fr;
-      }
-      .hero-mosaic-col:nth-child(2) { margin-top: clamp(1rem, 2vw, 1.5rem); }
     }
     @media (max-width: 480px) {
       .hero-mosaic { grid-template-columns: 1fr; }
@@ -384,7 +376,7 @@
     }
     .marquee-item {
       flex-shrink: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-weight: 700;
       font-size: clamp(1rem, 0.85rem + 0.5vw, 1.3125rem);
       letter-spacing: -0.01em;
@@ -427,7 +419,7 @@
       flex: 1;
     }
     .stat-num {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-weight: 800;
       font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
       color: var(--accent);
@@ -450,50 +442,29 @@
       .steps-grid { grid-template-columns: 1fr; }
     }
     .step-card {
-      background: rgba(255, 255, 255, 0.72);
-      border: 1px solid rgba(0, 0, 0, 0.10);
+      background: #fff;
+      border: none;
       border-radius: clamp(1rem, 2vw, 1.375rem);
       padding: clamp(1.75rem, 3vw, 2.5rem);
       position: relative;
-      overflow: hidden;
-      isolation: isolate;
       box-shadow:
-        0 1px 3px rgba(0,0,0,0.06),
-        inset 0 2px 8px rgba(0,0,0,0.09),
-        inset 0 1px 2px rgba(0,0,0,0.07),
-        inset 0 -3px 6px rgba(255,255,255,0.95);
+        0 8px 40px rgba(124, 58, 237, 0.10),
+        0 2px 12px rgba(249, 115, 22, 0.08),
+        0 1px 3px rgba(0,0,0,0.04);
       transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1),
-                  box-shadow 0.28s ease,
-                  background 0.2s ease;
+                  box-shadow 0.28s ease;
     }
-    .step-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: linear-gradient(
-        180deg,
-        rgba(0,0,0,0.03) 0%,
-        rgba(255,255,255,0.0) 60%,
-        rgba(255,255,255,0.55) 100%
-      );
-      pointer-events: none;
-      z-index: 1;
-    }
-    .step-card > * { position: relative; z-index: 2; }
     .step-card:hover {
-      transform: translateY(-2px) scale(1.01);
-      background: rgba(255, 255, 255, 0.85);
+      transform: translateY(-3px);
       box-shadow:
-        0 1px 4px rgba(0,0,0,0.08),
-        inset 0 2px 10px rgba(0,0,0,0.11),
-        inset 0 1px 2px rgba(0,0,0,0.08),
-        inset 0 -3px 6px rgba(255,255,255,0.98);
+        0 16px 56px rgba(124, 58, 237, 0.16),
+        0 4px 16px rgba(249, 115, 22, 0.12),
+        0 1px 4px rgba(0,0,0,0.05);
     }
     .step-bg-num {
       position: absolute;
       top: -1rem; right: 1.25rem;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-weight: 800;
       font-size: clamp(5rem, 4rem + 4vw, 8rem);
       line-height: 1;
@@ -502,13 +473,23 @@
       user-select: none;
     }
     .step-icon {
-      width: 2.625rem; height: 2.625rem;
-      border-radius: 0.75rem;
+      width: 2.75rem; height: 2.75rem;
+      border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-weight: 800;
       font-size: 1rem;
+      color: #fff;
       margin-bottom: 1.375rem;
+      background: linear-gradient(135deg, #7c3aed 0%, #c084fc 30%, #fb923c 60%, #f97316 80%, #7c3aed 100%);
+      background-size: 300% 300%;
+      box-shadow: none;
+      animation: iconShift 4s ease infinite;
+    }
+    @keyframes iconShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     .step-time {
       font-size: 0.75rem;
@@ -536,7 +517,7 @@
     }
     .offer-accordion summary::-webkit-details-marker { display: none; }
     .offer-accordion-title {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-size: clamp(1.125rem, 0.9rem + 0.75vw, 1.5rem);
       font-weight: 700;
       letter-spacing: -0.01em;
@@ -565,88 +546,92 @@
       max-width: 42rem;
     }
 
-    /* ── Benefits (dark) ── */
-    .benefits-section { background: var(--ink); }
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
-      gap: clamp(2rem, 4vw, 3rem);
+    /* ── Benefits sticky scroll ── */
+    .benefits-section {
+      background: #fff;
+      height: 400vh;
     }
-    .benefit-num {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
-      font-weight: 800;
-      font-size: clamp(3.5rem, 2.5rem + 4vw, 5.5rem);
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 0.875rem;
+    .benefits-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      z-index: 2;
     }
-    .benefit-divider {
-      width: 2rem; height: 2px;
-      background: rgba(255,255,255,0.12);
-      margin-bottom: 1.25rem;
+    .benefit-item {
+      position: absolute;
+      text-align: center;
+      padding: 2rem 2rem 3rem;
+      overflow: visible;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      pointer-events: none;
+    }
+    .benefit-item.is-active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .benefit-headline {
+      font-family: "Figtree", sans-serif;
+      font-size: clamp(3.9rem, 2.6rem + 6.5vw, 9.1rem);
+      font-weight: 500;
+      line-height: 1.2;
+      padding-bottom: 0.15em;
+      letter-spacing: -0.03em;
+      background: linear-gradient(105deg, #7c3aed 0%, #c084fc 25%, #fb923c 55%, #f97316 75%, #7c3aed 100%);
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: benefitGradientShift 2s ease infinite;
+    }
+    @keyframes benefitGradientShift {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .benefit-subtext {
+      font-family: "Figtree", sans-serif;
+      font-size: clamp(1.43rem, 1.17rem + 1.04vw, 1.82rem);
+      color: rgba(0,0,0,0.45);
+      margin-top: 1.5rem;
+      max-width: 32rem;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.6;
     }
 
-    /* ── Portfolio Carousel ── */
-    .carousel-wrap {
-      position: relative;
-    }
-    .carousel-track-outer {
+    /* ── Portfolio Drag Carousel ── */
+    .portfolio-marquee-outer {
       overflow: hidden;
-      border-radius: clamp(0.75rem, 1.5vw, 1.25rem);
+      cursor: grab;
+      user-select: none;
     }
-    .carousel-track {
+    .portfolio-marquee-outer.dragging { cursor: grabbing; }
+    .portfolio-marquee-track {
       display: flex;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      gap: clamp(1rem, 2vw, 1.5rem);
+      width: max-content;
+      transition: transform 0.05s linear;
     }
-    .carousel-slide {
-      min-width: 100%;
-      aspect-ratio: 16 / 9;
-      background: var(--surface);
+    .portfolio-card {
+      flex-shrink: 0;
+      width: clamp(280px, 36vw, 560px);
+      aspect-ratio: 8 / 9;
+      border-radius: clamp(0.75rem, 1.5vw, 1.125rem);
       overflow: hidden;
+      background: var(--surface);
+      pointer-events: none;
     }
-    .carousel-slide img {
+    .portfolio-card img {
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-    }
-    /* Arrows */
-    .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 2.75rem; height: 2.75rem;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(0,0,0,0.10);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06), inset 0 2px 6px rgba(0,0,0,0.08), inset 0 -2px 4px rgba(255,255,255,0.90);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 2;
-      transition: background 0.2s ease, transform 0.2s ease;
-    }
-    .carousel-btn:hover { background: rgba(255,255,255,0.95); transform: translateY(-50%) scale(1.08); }
-    .carousel-btn svg { width: 1rem; height: 1rem; stroke: var(--ink); fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
-    .carousel-prev { left: 1rem; }
-    .carousel-next { right: 1rem; }
-    /* Dots */
-    .carousel-dots {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-top: 1.25rem;
-    }
-    .carousel-dot {
-      width: 0.45rem; height: 0.45rem;
-      border-radius: 50%;
-      background: rgba(20,20,20,0.2);
-      cursor: pointer;
-      transition: background 0.25s ease, transform 0.25s ease;
-      border: none;
-      padding: 0;
-    }
-    .carousel-dot.active {
-      background: var(--ink);
-      transform: scale(1.35);
     }
 
     /* ── Testimonials ── */
@@ -670,7 +655,7 @@
       margin-bottom: 1.375rem;
     }
     .testi-name {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-weight: 700;
       font-size: 0.9375rem;
       color: var(--ink);
@@ -690,7 +675,7 @@
       margin-top: clamp(2rem, 4vw, 3rem);
     }
     .promise-box p {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-weight: 600;
       font-size: clamp(1rem, 0.85rem + 0.5vw, 1.25rem);
       line-height: 1.5;
@@ -706,7 +691,7 @@
     }
     .faq-row:last-child { border-bottom: 1px solid rgba(0,0,0,0.07); }
     .faq-q {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+      font-family: "Figtree", sans-serif;
       font-weight: 700;
       font-size: clamp(0.9375rem, 0.85rem + 0.3vw, 1.125rem);
       color: var(--ink);
@@ -752,10 +737,7 @@
     #anim-ctas    { animation-delay: 0.44s; }
     #anim-hero-img{ animation-delay: 0.54s; }
 
-    /* ── Scroll animation base (GSAP handles these) ── */
-    .will-animate {
-      /* initial state set by gsap.from() in script */
-    }
+    /* ── Scroll animation base (GSAP handles these via gsap.from()) ── */
 
     /* ── Accent dot ── */
     .accent-dot { color: var(--accent); }
@@ -772,7 +754,7 @@
 <!-- ══ NAV ══════════════════════════════════════════════════════════════ -->
 <nav>
   <div class="container nav-inner">
-    <a href="#" class="nav-logo">Brand Reimagine</a>
+    <a href="#" class="nav-logo">Brand Reimagine<sup style="font-size: 0.5em; letter-spacing: 0; vertical-align: super;">TM</sup></a>
     <a href="#get-started" class="btn btn-dark" style="font-size: 0.875rem; padding: 0.65rem 1.375rem;">Get My Brand Identity →</a>
   </div>
 </nav>
@@ -783,39 +765,18 @@
 <section id="hero">
   <div class="container hero-wrap">
 
-    <!-- Left: text -->
     <div class="hero-text">
-      <h1 class="t-hero hero-anim" id="anim-h1" style="max-width: 18ch; margin-bottom: clamp(1.5rem, 3vw, 2rem);">
-        No back and forth,<br>no decision fatigue,<br><span class="accent-dot">just done.</span>
+      <h1 class="t-h2 hero-anim" id="anim-h1" style="color: #fff; max-width: 22ch; margin-bottom: clamp(1.5rem, 3vw, 2rem); font-weight: 500;">
+        No back and forth,<br>no decision fatigue
       </h1>
 
-      <p class="t-body hero-anim" id="anim-sub" style="max-width: 36rem; margin-bottom: clamp(2rem, 4vw, 2.75rem);">
+      <p class="t-body hero-anim" id="anim-sub" style="color: rgba(255,255,255,0.82); max-width: 36rem; margin-bottom: clamp(2rem, 4vw, 2.75rem);">
         Business owners who know their brand needs to evolve — and are ready to trust experts to make it happen.
       </p>
 
-      <div style="display: flex; flex-wrap: wrap; gap: 0.875rem;" class="hero-anim" id="anim-ctas">
+      <div style="display: flex; flex-wrap: wrap; gap: 0.875rem; justify-content: center;" class="hero-anim" id="anim-ctas">
         <a href="#get-started" class="btn btn-dark">Get My Brand Identity →</a>
-        <a href="#portfolio" class="btn btn-ghost">See Portfolio First</a>
-      </div>
-    </div>
-
-    <!-- Right: image mosaic -->
-    <div class="hero-mosaic hero-anim" id="anim-hero-img">
-      <div class="hero-mosaic-col">
-        <div class="hero-mosaic-img tall">
-          <img src="placeholder-hero-01.png" alt="Brand identity — logo showcase" loading="lazy">
-        </div>
-        <div class="hero-mosaic-img short">
-          <img src="placeholder-hero-02.png" alt="Brand identity — colour palette" loading="lazy">
-        </div>
-      </div>
-      <div class="hero-mosaic-col">
-        <div class="hero-mosaic-img sq">
-          <img src="placeholder-hero-03.png" alt="Brand identity — business card" loading="lazy">
-        </div>
-        <div class="hero-mosaic-img tall">
-          <img src="placeholder-hero-04.png" alt="Brand identity — brand mockup" loading="lazy">
-        </div>
+        <a href="#portfolio" class="btn btn-ghost"><span style="color: #141414; position: relative; z-index: 10;">See Portfolio First</span></a>
       </div>
     </div>
 
@@ -825,7 +786,7 @@
 
 <!-- ══ CLIENT LOGOS MARQUEE ═══════════════════════════════════════════════ -->
 <!-- section: client-logos -->
-<section id="client-logos" style="width:100%;">
+<section id="client-logos" style="width:100%; padding-top: clamp(3rem, 6vw, 5rem);">
   <p style="display: block; width: 100%; text-align: center; margin-bottom: clamp(1.25rem, 2.5vw, 1.875rem);" class="t-eyebrow">
     Trusted by growing businesses
   </p>
@@ -877,8 +838,16 @@
     <div class="solution-grid">
 
       <div class="will-animate" style="text-align: center; margin: 0 auto;">
-        <h2 class="t-h2" style="margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem); font-size: clamp(2.6rem, 1.625rem + 3.9vw, 4.875rem);">
-          Brand Reimagine is built differently.
+        <h2 class="t-h2" style="margin-bottom: clamp(1.25rem, 2.5vw, 1.75rem);">
+          Brand Reimagine<sup style="font-size: 0.35em; vertical-align: super;">TM</sup> is built <span id="word-differently" style="
+            background: linear-gradient(105deg, #7c3aed 0%, #c084fc 25%, #fb923c 60%, #f97316 80%, #7c3aed 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: grayscale(1) brightness(0);
+            transition: filter 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+          ">differently.</span>
         </h2>
         <p class="t-body">
           You sit down with us for one deep discovery session — not a brief, not a checklist. A real conversation about your business, your audience, and where you're headed. We ask the questions you haven't thought about yet. Then we disappear. When we come back, we bring you a complete brand identity — logo, visual system, strategic narrative — built entirely on what we learned about you.
@@ -893,19 +862,18 @@
 
 <!-- ══ HOW IT WORKS ═══════════════════════════════════════════════════════ -->
 <!-- section: how-it-works -->
-<section id="how-it-works" class="section-pad" style="background: var(--surface);">
+<section id="how-it-works" class="section-pad" style="background: #fff;">
   <div class="container">
 
     <div class="will-animate" style="margin-bottom: clamp(3rem, 6vw, 5rem);">
-      <span class="t-eyebrow" style="margin-bottom: 1.25rem; display: block;">The Process</span>
-      <h2 class="t-h2" style="max-width: 32rem;">Simple process.<br>Fast results.</h2>
+      <h2 class="t-h2" style="max-width: none; white-space: nowrap; font-size: clamp(3.9rem, 2.6rem + 6.5vw, 9.1rem); text-align: center;">How it works</h2>
     </div>
 
     <div class="steps-grid">
 
       <!-- Step 1 -->
       <div class="step-card will-animate">
-        <div class="step-icon" style="background: var(--accent); color: #fff;">1</div>
+        <div class="step-icon">1</div>
         <p class="step-time" style="color: var(--accent);">10 minutes</p>
         <h3 class="t-h3" style="margin-bottom: 0.75rem;">Brief</h3>
         <p class="t-body t-small">Fill out a short intake form covering your business, your audience, and the feel you're going for. No mood boards required. We ask the right questions so you don't have to over-explain.</p>
@@ -913,7 +881,7 @@
 
       <!-- Step 2 -->
       <div class="step-card will-animate">
-        <div class="step-icon" style="background: var(--ink); color: #fff;">2</div>
+        <div class="step-icon">2</div>
         <p class="step-time" style="color: var(--ink);">14 days</p>
         <h3 class="t-h3" style="margin-bottom: 0.75rem;">Build</h3>
         <p class="t-body t-small">We design your complete brand identity — logo, color palette, typography, and brand mockups showing your new look applied to real materials. One direction, crafted with intent.</p>
@@ -921,7 +889,7 @@
 
       <!-- Step 3 -->
       <div class="step-card will-animate">
-        <div class="step-icon" style="background: var(--accent); color: #fff;">3</div>
+        <div class="step-icon">3</div>
         <p class="step-time" style="color: var(--accent);">Ready to use</p>
         <h3 class="t-h3" style="margin-bottom: 0.75rem;">Deliver</h3>
         <p class="t-body t-small">You receive your brand presentation deck plus final logo files in every format you'll need — print-ready, web-ready, and everything in between.</p>
@@ -995,40 +963,29 @@
 
 <!-- ══ BENEFITS ═══════════════════════════════════════════════════════════ -->
 <!-- section: benefits -->
-<section id="benefits" class="section-pad benefits-section">
-  <div class="container">
+<section id="benefits" class="benefits-section">
+  <div class="benefits-sticky">
 
-    <div class="will-animate" style="margin-bottom: clamp(3rem, 6vw, 5rem);">
-      <h2 class="t-h2" style="color: #fff; max-width: 32rem;">Why clients love it</h2>
+    <div class="benefit-item" id="benefit-0">
+      <h3 class="benefit-headline">Speed.</h3>
+      <p class="benefit-subtext">From discovery to reveal in 10–14 working days.</p>
     </div>
 
-    <div class="benefits-grid">
-
-      <div class="will-animate">
-        <div class="benefit-divider"></div>
-        <h3 class="t-h3" style="color: #fff; margin-bottom: 0.625rem;">Speed.</h3>
-        <p class="t-body t-small" style="color: rgba(255,255,255,0.42);">From discovery to reveal in 10–14 working days.</p>
-      </div>
-
-      <div class="will-animate">
-        <div class="benefit-divider"></div>
-        <h3 class="t-h3" style="color: #fff; margin-bottom: 0.625rem;">Clarity.</h3>
-        <p class="t-body t-small" style="color: rgba(255,255,255,0.42);">You get a brand that tells your story — not one you had to art-direct yourself.</p>
-      </div>
-
-      <div class="will-animate">
-        <div class="benefit-divider"></div>
-        <h3 class="t-h3" style="color: #fff; margin-bottom: 0.625rem;">Creative integrity.</h3>
-        <p class="t-body t-small" style="color: rgba(255,255,255,0.42);">Our designers work with full freedom, which means bolder, more strategic outcomes.</p>
-      </div>
-
-      <div class="will-animate">
-        <div class="benefit-divider"></div>
-        <h3 class="t-h3" style="color: #fff; margin-bottom: 0.625rem;">Efficiency.</h3>
-        <p class="t-body t-small" style="color: rgba(255,255,255,0.42);">No back-and-forth means a fraction of the cost of traditional rebranding.</p>
-      </div>
-
+    <div class="benefit-item" id="benefit-1">
+      <h3 class="benefit-headline">Clarity.</h3>
+      <p class="benefit-subtext">You get a brand that tells your story — not one you had to art-direct yourself.</p>
     </div>
+
+    <div class="benefit-item" id="benefit-2">
+      <h3 class="benefit-headline">Creative integrity.</h3>
+      <p class="benefit-subtext">Our designers work with full freedom, which means bolder, more strategic outcomes.</p>
+    </div>
+
+    <div class="benefit-item" id="benefit-3">
+      <h3 class="benefit-headline">Efficiency.</h3>
+      <p class="benefit-subtext">No back-and-forth means a fraction of the cost of traditional rebranding.</p>
+    </div>
+
   </div>
 </section>
 
@@ -1037,33 +994,36 @@
 <!-- section: social-proof -->
 <section id="portfolio" class="section-pad">
   <div class="container">
-
     <div class="will-animate" style="margin-bottom: clamp(3rem, 6vw, 5rem);">
-      <span class="t-eyebrow" style="margin-bottom: 1.25rem; display: block;">Portfolio</span>
-      <h2 class="t-h2" style="max-width: 32rem;">You'll know quality<br>when you see it.</h2>
+      <h2 class="t-h2" style="max-width: 32rem;"><span id="word-imagine" style="
+            background: linear-gradient(105deg, #7c3aed 0%, #c084fc 25%, #fb923c 60%, #f97316 80%, #7c3aed 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: grayscale(1) brightness(0);
+            transition: filter 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+          ">Imagine</span> your brand's next chapter</h2>
     </div>
+  </div>
 
-    <!-- CAROUSEL: 6 portfolio pieces — 1920×1080 WebP recommended per slide -->
-    <div class="carousel-wrap will-animate" id="portfolio-carousel">
-      <div class="carousel-track-outer">
-        <div class="carousel-track" id="carousel-track">
-          <div class="carousel-slide"><img src="placeholder-portfolio-01.svg" alt="Portfolio — Brand 1" loading="lazy"></div>
-          <div class="carousel-slide"><img src="placeholder-portfolio-02.svg" alt="Portfolio — Brand 2" loading="lazy"></div>
-          <div class="carousel-slide"><img src="placeholder-portfolio-03.svg" alt="Portfolio — Brand 3" loading="lazy"></div>
-          <div class="carousel-slide"><img src="placeholder-portfolio-04.svg" alt="Portfolio — Brand 4" loading="lazy"></div>
-          <div class="carousel-slide"><img src="placeholder-portfolio-05.svg" alt="Portfolio — Brand 5" loading="lazy"></div>
-          <div class="carousel-slide"><img src="placeholder-portfolio-06.svg" alt="Portfolio — Brand 6" loading="lazy"></div>
-        </div>
-      </div>
-      <button class="carousel-btn carousel-prev" aria-label="Previous">
-        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-      </button>
-      <button class="carousel-btn carousel-next" aria-label="Next">
-        <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
-      </button>
-      <div class="carousel-dots" id="carousel-dots"></div>
+  <!-- PORTFOLIO MARQUEE: full width, outside container -->
+  <div class="portfolio-marquee-outer will-animate">
+    <div class="portfolio-marquee-track" id="portfolio-track">
+      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 1" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 2" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 3" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 4" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 5" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 6" loading="lazy"></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 1" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 2" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 3" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 4" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 5" loading="lazy"></div>
+      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 6" loading="lazy"></div>
     </div>
-
   </div>
 </section>
 
@@ -1151,7 +1111,15 @@
     <div class="will-animate">
       <span class="t-eyebrow" style="color: rgba(255,255,255,0.38); margin-bottom: 1.5rem; display: block;">Get Started</span>
       <h2 class="t-h2" style="color: #fff; margin-bottom: clamp(1rem, 2.5vw, 1.375rem);">
-        Your brand should look as good as what you actually deliver.
+        Your brand should <span id="word-lookgood" style="
+            background: linear-gradient(105deg, #7c3aed 0%, #c084fc 25%, #fb923c 60%, #f97316 80%, #7c3aed 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: grayscale(1) brightness(0);
+            transition: filter 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+          ">look as good</span> as what you actually deliver.
       </h2>
       <p class="t-body" style="color: rgba(255,255,255,0.48); margin-bottom: clamp(0.625rem, 1.5vw, 0.875rem);">
         You've built something worth trusting. The brand should say that.
@@ -1162,7 +1130,7 @@
       <div style="display: flex; flex-wrap: wrap; gap: 0.875rem; justify-content: center;">
         <!-- FORM: Replace href with your booking link, Calendly URL, or form anchor -->
         <a href="#" class="btn btn-accent">Get My Brand Identity →</a>
-        <a href="#portfolio" class="btn btn-ghost" style="border-color: rgba(255,255,255,0.18); color: rgba(255,255,255,0.65);">See Portfolio First</a>
+        <a href="#portfolio" class="btn btn-ghost" style="border-color: rgba(255,255,255,0.18);"><span style="color: #141414; position: relative; z-index: 10;">See Portfolio First</span></a>
       </div>
     </div>
 
@@ -1173,7 +1141,12 @@
 <!-- ══ FOOTER ═════════════════════════════════════════════════════════════ -->
 <footer>
   <div style="max-width: 82rem; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;">
-    <span style="font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif; font-weight: 800; font-size: 1.125rem; color: #fff; letter-spacing: -0.02em;">YourBrand<span style="color: var(--accent);">.</span></span>
+    <span style="font-family: 'Figtree', sans-serif; font-weight: 400; font-size: 1.125rem; letter-spacing: -0.02em;
+      background: linear-gradient(105deg, #7c3aed 0%, #c084fc 30%, #fb923c 65%, #f97316 85%, #7c3aed 100%);
+      background-size: 100% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;">Brand Reimagine<sup style="font-size: 0.5em; letter-spacing: 0; vertical-align: super; -webkit-text-fill-color: #fff; color: #fff;">TM</sup></span>
     <p style="font-size: 0.8125rem; color: rgba(255,255,255,0.28);">© 2025. All rights reserved.</p>
   </div>
 </footer>
@@ -1182,6 +1155,41 @@
 <!-- ══ SCRIPTS ════════════════════════════════════════════════════════════ -->
 <script>
   gsap.registerPlugin(ScrollTrigger, Flip);
+
+  // ─── Smart nav: visible on hero, hides on scroll down, shows on scroll up ──
+  (function () {
+    const nav = document.querySelector('nav');
+    let lastY = window.scrollY;
+
+    window.addEventListener('scroll', function () {
+      const currentY = window.scrollY;
+      const atTop = currentY <= 10;
+      const scrollingUp = currentY < lastY;
+
+      if (atTop || scrollingUp) {
+        nav.classList.remove('nav-hidden');
+      } else {
+        nav.classList.add('nav-hidden');
+      }
+
+      lastY = currentY;
+    }, { passive: true });
+  })();
+
+  // ─── Smooth anchor scrolling (accounts for fixed nav height) ─────────
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', function (e) {
+      const id = this.getAttribute('href').slice(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      const navH = document.querySelector('nav').offsetHeight;
+      const top = target.getBoundingClientRect().top + window.scrollY - navH;
+      const distance = Math.abs(top - window.scrollY);
+      // Instant jump for long distances (e.g. scrolling past the 400vh benefits section)
+      window.scrollTo({ top, behavior: distance > window.innerHeight * 2 ? 'auto' : 'smooth' });
+    });
+  });
 
   // ─── Hero: handled by CSS @keyframes (RAF-independent) ─────────────
 
@@ -1198,6 +1206,64 @@
       modifiers: {
         x: gsap.utils.unitize(x => parseFloat(x) % halfWidth)
       }
+    });
+  })();
+
+  // ─── "Imagine" gradient reveal on scroll ─────────────────────────────
+  ScrollTrigger.create({
+    trigger: '#word-imagine',
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      document.getElementById('word-imagine').style.filter = 'grayscale(0) brightness(1)';
+    }
+  });
+
+  // ─── "look as good" gradient reveal on scroll ────────────────────────
+  ScrollTrigger.create({
+    trigger: '#word-lookgood',
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      document.getElementById('word-lookgood').style.filter = 'grayscale(0) brightness(1)';
+    }
+  });
+
+  // ─── "differently" gradient sweep on scroll ──────────────────────────
+  ScrollTrigger.create({
+    trigger: '#word-differently',
+    start: 'top 80%',
+    once: true,
+    onEnter: () => {
+      document.getElementById('word-differently').style.filter = 'grayscale(0) brightness(1)';
+    }
+  });
+
+  // ─── Benefits sticky scroll ───────────────────────────────────────────
+  (function () {
+    const benefitItems = Array.from(document.querySelectorAll('.benefit-item'));
+    const n = benefitItems.length;
+    let currentIdx = -1;
+
+    function setActive(idx) {
+      if (idx === currentIdx) return;
+      currentIdx = idx;
+      benefitItems.forEach((el, i) => el.classList.toggle('is-active', i === idx));
+    }
+
+    // Show first item immediately when section enters view
+    setActive(0);
+
+    ScrollTrigger.create({
+      trigger: '#benefits',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: true,
+      onUpdate(self) {
+        const idx = Math.min(Math.floor(self.progress * n), n - 1);
+        setActive(idx);
+      },
+      onLeaveBack() { setActive(0); }
     });
   })();
 
@@ -1220,21 +1286,6 @@
     });
   });
 
-  // ─── Benefit number pop (dark section) ──────────────────────────────
-  ScrollTrigger.create({
-    trigger: '#benefits',
-    start: 'top 72%',
-    once: true,
-    onEnter: () => {
-      gsap.from('#benefits .benefit-num', {
-        scale: 0.6,
-        opacity: 0,
-        duration: 0.65,
-        stagger: 0.14,
-        ease: 'back.out(1.6)'
-      });
-    }
-  });
 
   // ─── Portfolio grid stagger ─────────────────────────────────────────
   ScrollTrigger.create({
@@ -1254,43 +1305,79 @@
 </script>
 
 <script>
-  /* ── Portfolio Carousel ── */
+  /* ── Portfolio: auto-scroll + drag ── */
   (function () {
-    const track = document.getElementById('carousel-track');
-    const dotsWrap = document.getElementById('carousel-dots');
-    if (!track) return;
+    const outer = document.querySelector('.portfolio-marquee-outer');
+    const track = document.getElementById('portfolio-track');
+    if (!outer || !track) return;
 
-    const slides = track.querySelectorAll('.carousel-slide');
-    const total = slides.length;
-    let current = 0;
+    const speed = 0.6;        // px per frame auto-scroll
+    let baseX = 0;            // auto-scroll position
+    let dragOffset = 0;       // user drag offset
+    let velX = 0;             // drag momentum
+    let isDragging = false;
+    let dragStartClient = 0;
+    let dragStartOffset = 0;
+    let lastClientX = 0;
+    let halfWidth = 0;
 
-    // Build dots
-    slides.forEach((_, i) => {
-      const dot = document.createElement('button');
-      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-      dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-      dot.addEventListener('click', () => goTo(i));
-      dotsWrap.appendChild(dot);
+    // Wait for images to settle before measuring
+    requestAnimationFrame(() => {
+      halfWidth = track.scrollWidth / 2;
     });
 
-    function goTo(index) {
-      current = (index + total) % total;
-      track.style.transform = `translateX(-${current * 100}%)`;
-      dotsWrap.querySelectorAll('.carousel-dot').forEach((d, i) => {
-        d.classList.toggle('active', i === current);
-      });
-    }
+    // GSAP ticker drives everything
+    gsap.ticker.add(() => {
+      if (!halfWidth) halfWidth = track.scrollWidth / 2;
 
-    document.querySelector('.carousel-prev').addEventListener('click', () => goTo(current - 1));
-    document.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
+      if (!isDragging) {
+        baseX -= speed;
+        // decay drag momentum
+        velX *= 0.92;
+        dragOffset += velX;
+      }
 
-    // Swipe support
-    let startX = 0;
-    track.parentElement.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
-    track.parentElement.addEventListener('touchend', e => {
-      const diff = startX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 40) goTo(diff > 0 ? current + 1 : current - 1);
+      // wrap baseX for seamless loop
+      baseX = ((baseX % halfWidth) - halfWidth) % halfWidth;
+
+      const finalX = baseX + dragOffset;
+      track.style.transform = `translateX(${finalX}px)`;
+    });
+
+    function pointerX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
+
+    outer.addEventListener('mousedown', e => {
+      isDragging = true;
+      dragStartClient = pointerX(e);
+      dragStartOffset = dragOffset;
+      lastClientX = dragStartClient;
+      outer.classList.add('dragging');
+    });
+
+    outer.addEventListener('touchstart', e => {
+      isDragging = true;
+      dragStartClient = pointerX(e);
+      dragStartOffset = dragOffset;
+      lastClientX = dragStartClient;
+      outer.classList.add('dragging');
     }, { passive: true });
+
+    window.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      velX = pointerX(e) - lastClientX;
+      lastClientX = pointerX(e);
+      dragOffset = dragStartOffset + (pointerX(e) - dragStartClient);
+    });
+
+    window.addEventListener('touchmove', e => {
+      if (!isDragging) return;
+      velX = pointerX(e) - lastClientX;
+      lastClientX = pointerX(e);
+      dragOffset = dragStartOffset + (pointerX(e) - dragStartClient);
+    }, { passive: true });
+
+    window.addEventListener('mouseup', () => { isDragging = false; outer.classList.remove('dragging'); });
+    window.addEventListener('touchend', () => { isDragging = false; outer.classList.remove('dragging'); });
   })();
 
   /* ── Scroll-reveal: grey → black word by word ── */
