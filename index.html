@@ -828,14 +828,15 @@
       pointer-events: none;
     }
     /* Rectangle (portrait) card */
+    /* Square card (was rect) */
     .portfolio-card--rect {
-      height: clamp(300px, 42vw, 480px);
-      width: calc(clamp(300px, 42vw, 480px) * 0.74);
+      height: clamp(280px, 36vw, 440px);
+      width: clamp(280px, 36vw, 440px);
     }
-    /* Square card */
+    /* 16:9 card (was square) */
     .portfolio-card--sq {
-      height: clamp(210px, 28vw, 340px);
-      width: clamp(210px, 28vw, 340px);
+      height: clamp(210px, 26vw, 340px);
+      width: calc(clamp(210px, 26vw, 340px) * (16/9));
     }
     .portfolio-card img {
       width: 100%; height: 100%;
