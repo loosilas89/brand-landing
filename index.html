@@ -780,11 +780,49 @@
     /* ── Portfolio Drag Strip ── */
     .portfolio-marquee-outer {
       overflow: hidden;
-      cursor: grab;
+      cursor: none;
       user-select: none;
       padding-left: var(--pad-x);
     }
-    .portfolio-marquee-outer.dragging { cursor: grabbing; }
+    .portfolio-marquee-outer.dragging { cursor: none; }
+
+    /* ── Pill cursor ── */
+    #pf-cursor {
+      position: fixed;
+      z-index: 9999;
+      pointer-events: none;
+      top: 0; left: 0;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      will-change: transform;
+    }
+    #pf-cursor-pill {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #141414;
+      color: #fff;
+      font-family: "Figtree", sans-serif;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      padding: 0.5rem 1.125rem;
+      border-radius: 100px;
+      white-space: nowrap;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+    #pf-cursor.is-dragging #pf-cursor-pill {
+      background: #333;
+      transform: translate(-50%, -50%) scale(0.94);
+    }
+    .pf-cursor-arrows {
+      display: flex;
+      gap: 0.2rem;
+      opacity: 0.7;
+      font-size: 0.75rem;
+    }
     .portfolio-marquee-track {
       display: flex;
       align-items: flex-end;
@@ -1565,79 +1603,97 @@
 </script>
 
 <script>
-  /* ── Portfolio: auto-scroll + drag ── */
+  /* ── Portfolio: drag-only + pill cursor ── */
   (function () {
     const outer = document.querySelector('.portfolio-marquee-outer');
     const track = document.getElementById('portfolio-track');
+    const cursor = document.getElementById('pf-cursor');
     if (!outer || !track) return;
 
-    const speed = 0.6;        // px per frame auto-scroll
-    let baseX = 0;            // auto-scroll position
-    let dragOffset = 0;       // user drag offset
-    let velX = 0;             // drag momentum
+    let dragOffset = 0;
+    let velX = 0;
     let isDragging = false;
     let dragStartClient = 0;
     let dragStartOffset = 0;
     let lastClientX = 0;
-    let halfWidth = 0;
 
-    // Wait for images to settle before measuring
-    requestAnimationFrame(() => {
-      halfWidth = track.scrollWidth / 2;
-    });
-
-    // GSAP ticker drives everything
-    gsap.ticker.add(() => {
-      if (!halfWidth) halfWidth = track.scrollWidth / 2;
-
-      if (!isDragging) {
-        baseX -= speed;
-        // decay drag momentum
-        velX *= 0.92;
-        dragOffset += velX;
-      }
-
-      // wrap baseX for seamless loop
-      baseX = ((baseX % halfWidth) - halfWidth) % halfWidth;
-
-      const finalX = baseX + dragOffset;
-      track.style.transform = `translateX(${finalX}px)`;
-    });
+    // Smooth cursor lerp
+    let cursorTargetX = 0, cursorTargetY = 0;
+    let cursorX = 0, cursorY = 0;
 
     function pointerX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
 
+    // GSAP ticker: momentum decay + cursor lerp
+    gsap.ticker.add(() => {
+      // Momentum
+      if (!isDragging) {
+        velX *= 0.9;
+        dragOffset += velX;
+      }
+      // Soft-clamp at edges
+      const minScroll = -(track.scrollWidth - outer.clientWidth);
+      if (dragOffset > 0)         dragOffset += (0 - dragOffset) * 0.18;
+      if (dragOffset < minScroll) dragOffset += (minScroll - dragOffset) * 0.18;
+
+      track.style.transform = `translateX(${dragOffset}px)`;
+
+      // Smooth cursor follow
+      if (cursor) {
+        cursorX += (cursorTargetX - cursorX) * 0.16;
+        cursorY += (cursorTargetY - cursorY) * 0.16;
+        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+      }
+    });
+
+    // Cursor visibility + tracking
+    outer.addEventListener('mousemove', e => {
+      cursorTargetX = e.clientX;
+      cursorTargetY = e.clientY;
+    });
+    outer.addEventListener('mouseenter', () => { if (cursor) cursor.style.opacity = '1'; });
+    outer.addEventListener('mouseleave', () => { if (cursor) cursor.style.opacity = '0'; });
+
+    // Mouse drag
     outer.addEventListener('mousedown', e => {
       isDragging = true;
       dragStartClient = pointerX(e);
       dragStartOffset = dragOffset;
       lastClientX = dragStartClient;
+      velX = 0;
       outer.classList.add('dragging');
+      if (cursor) cursor.classList.add('is-dragging');
     });
-
-    outer.addEventListener('touchstart', e => {
-      isDragging = true;
-      dragStartClient = pointerX(e);
-      dragStartOffset = dragOffset;
-      lastClientX = dragStartClient;
-      outer.classList.add('dragging');
-    }, { passive: true });
-
     window.addEventListener('mousemove', e => {
       if (!isDragging) return;
       velX = pointerX(e) - lastClientX;
       lastClientX = pointerX(e);
       dragOffset = dragStartOffset + (pointerX(e) - dragStartClient);
     });
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+      outer.classList.remove('dragging');
+      if (cursor) cursor.classList.remove('is-dragging');
+    });
 
+    // Touch drag
+    outer.addEventListener('touchstart', e => {
+      isDragging = true;
+      dragStartClient = pointerX(e);
+      dragStartOffset = dragOffset;
+      lastClientX = dragStartClient;
+      velX = 0;
+      outer.classList.add('dragging');
+    }, { passive: true });
     window.addEventListener('touchmove', e => {
       if (!isDragging) return;
       velX = pointerX(e) - lastClientX;
       lastClientX = pointerX(e);
       dragOffset = dragStartOffset + (pointerX(e) - dragStartClient);
     }, { passive: true });
-
-    window.addEventListener('mouseup', () => { isDragging = false; outer.classList.remove('dragging'); });
-    window.addEventListener('touchend', () => { isDragging = false; outer.classList.remove('dragging'); });
+    window.addEventListener('touchend', () => {
+      isDragging = false;
+      outer.classList.remove('dragging');
+    });
   })();
 
   /* ── Scroll-reveal: grey → black word by word ── */
@@ -1701,6 +1757,15 @@
     updateActive();
   })();
 </script>
+
+<!-- Portfolio pill cursor -->
+<div id="pf-cursor" aria-hidden="true">
+  <div id="pf-cursor-pill">
+    <span class="pf-cursor-arrows">←</span>
+    Drag to scroll
+    <span class="pf-cursor-arrows">→</span>
+  </div>
+</div>
 
 </body>
 </html>
