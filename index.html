@@ -731,27 +731,83 @@
       letter-spacing: -0.01em;
     }
 
-    /* ── Portfolio Drag Carousel ── */
+    /* ── Portfolio Case Study Header ── */
+    .portfolio-case {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: clamp(2rem, 5vw, 6rem);
+      align-items: start;
+      margin-bottom: clamp(2.5rem, 5vw, 4rem);
+    }
+    @media (max-width: 640px) {
+      .portfolio-case { grid-template-columns: 1fr; gap: 1.25rem; }
+    }
+    .pf-project-name {
+      font-size: clamp(1.25rem, 1.8vw, 1.625rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      margin-bottom: 0.875rem;
+    }
+    .pf-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .pf-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--ink);
+      padding: 0.28rem 0.75rem 0.28rem 0.55rem;
+      border-radius: 100px;
+      border: 1px solid rgba(0,0,0,0.1);
+      background: #fff;
+    }
+    .pf-tag-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .pf-desc {
+      font-size: clamp(1rem, 1.05vw, 1.125rem);
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    /* ── Portfolio Drag Strip ── */
     .portfolio-marquee-outer {
       overflow: hidden;
       cursor: grab;
       user-select: none;
+      padding-left: var(--pad-x);
     }
     .portfolio-marquee-outer.dragging { cursor: grabbing; }
     .portfolio-marquee-track {
       display: flex;
-      gap: clamp(1rem, 2vw, 1.5rem);
+      align-items: flex-end;
+      gap: clamp(0.625rem, 1.2vw, 0.875rem);
       width: max-content;
-      transition: transform 0.05s linear;
+      padding-right: var(--pad-x);
     }
     .portfolio-card {
       flex-shrink: 0;
-      width: clamp(280px, 36vw, 560px);
-      aspect-ratio: 8 / 9;
-      border-radius: clamp(0.75rem, 1.5vw, 1.125rem);
+      border-radius: clamp(0.5rem, 0.9vw, 0.75rem);
       overflow: hidden;
       background: var(--surface);
       pointer-events: none;
+    }
+    /* Rectangle (portrait) card */
+    .portfolio-card--rect {
+      height: clamp(300px, 42vw, 480px);
+      width: calc(clamp(300px, 42vw, 480px) * 0.74);
+    }
+    /* Square card */
+    .portfolio-card--sq {
+      height: clamp(210px, 28vw, 340px);
+      width: clamp(210px, 28vw, 340px);
     }
     .portfolio-card img {
       width: 100%; height: 100%;
@@ -1129,7 +1185,9 @@
 <!-- section: social-proof -->
 <section id="portfolio" class="section-pad">
   <div class="container">
-    <div class="will-animate" style="margin-bottom: clamp(3rem, 6vw, 5rem);">
+
+    <!-- Section heading -->
+    <div class="will-animate" style="margin-bottom: clamp(2.5rem, 5vw, 4rem);">
       <h2 class="t-h2" style="max-width: 32rem;">Brands <span id="word-imagine" style="
             background: linear-gradient(105deg, #7c3aed 0%, #c084fc 25%, #fb923c 60%, #f97316 80%, #7c3aed 100%);
             background-size: 200% auto;
@@ -1140,24 +1198,36 @@
             transition: filter 1.2s cubic-bezier(0.22, 1, 0.36, 1);
           ">Reimagined</span></h2>
     </div>
+
+    <!-- Case study meta row -->
+    <div class="portfolio-case will-animate">
+      <div>
+        <p class="pf-project-name">Meridian</p>
+        <div class="pf-tags">
+          <span class="pf-tag"><span class="pf-tag-dot" style="background:#3b82f6;"></span>Real Estate</span>
+          <span class="pf-tag"><span class="pf-tag-dot" style="background:#f59e0b;"></span>Luxury</span>
+        </div>
+      </div>
+      <div>
+        <p class="pf-desc">A sophisticated, elevated identity for a premium real estate developer targeting high-net-worth buyers. Designed to communicate trust and exclusivity, built to scale seamlessly across print, digital, and environmental touchpoints.</p>
+      </div>
+    </div>
+
   </div>
 
-  <!-- PORTFOLIO MARQUEE: full width, outside container -->
+  <!-- Draggable image strip — full bleed -->
   <div class="portfolio-marquee-outer will-animate">
     <div class="portfolio-marquee-track" id="portfolio-track">
-      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 1" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 2" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 3" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 4" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 5" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 6" loading="lazy"></div>
-      <!-- Duplicate for seamless loop -->
-      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 1" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 2" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 3" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 4" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-01.png" alt="Portfolio — Brand 5" loading="lazy"></div>
-      <div class="portfolio-card"><img src="placeholder-portfolio-02.png" alt="Portfolio — Brand 6" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--rect"><img src="placeholder-portfolio-01.png" alt="Meridian — Brand identity" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--sq"><img src="placeholder-portfolio-02.png" alt="Meridian — Logo mark" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--rect"><img src="placeholder-portfolio-02.png" alt="Meridian — Collateral" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--sq"><img src="placeholder-portfolio-01.png" alt="Meridian — Typography" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--rect"><img src="placeholder-portfolio-01.png" alt="Meridian — Business card" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--sq"><img src="placeholder-portfolio-02.png" alt="Meridian — Colour palette" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--rect"><img src="placeholder-portfolio-02.png" alt="Meridian — Signage" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--sq"><img src="placeholder-portfolio-01.png" alt="Meridian — Digital" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--rect"><img src="placeholder-portfolio-01.png" alt="Meridian — Packaging" loading="lazy"></div>
+      <div class="portfolio-card portfolio-card--sq"><img src="placeholder-portfolio-02.png" alt="Meridian — In context" loading="lazy"></div>
     </div>
   </div>
 </section>
