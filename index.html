@@ -131,7 +131,7 @@
       font-family: "Figtree", sans-serif;
       font-weight: 600;
       font-size: clamp(0.9375rem, 0.85rem + 0.25vw, 1rem);
-      padding: clamp(0.875rem, 1.5vw, 1.0625rem) clamp(1.75rem, 3vw, 2.375rem);
+      padding: clamp(0.7rem, 1.2vw, 0.85rem) clamp(1.75rem, 3vw, 2.375rem);
       border-radius: 100px;
       text-decoration: none;
       cursor: pointer;
@@ -285,23 +285,26 @@
     /* ── Nav ── */
     nav {
       position: fixed;
-      top: 0; left: 0; right: 0;
+      top: 1rem; left: 1rem; right: 1rem;
       z-index: 100;
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      background: rgba(255,255,255,0.82);
-      border-bottom: 1px solid rgba(0,0,0,0.07);
+      backdrop-filter: saturate(180%) blur(24px);
+      -webkit-backdrop-filter: saturate(180%) blur(24px);
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(0,0,0,0.07);
+      border-radius: 1rem;
       transform: translateY(0);
       transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
     }
     nav.nav-hidden {
-      transform: translateY(-100%);
+      transform: translateY(-120%);
     }
     .nav-inner {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: clamp(3.5rem, 5vw, 4rem);
+      height: clamp(3rem, 5vw, 3.5rem);
+      padding: 0 0.5rem 0 1.25rem;
+      gap: 1rem;
     }
     .nav-logo {
       font-family: "Figtree", sans-serif;
@@ -310,8 +313,55 @@
       letter-spacing: -0.02em;
       color: var(--ink);
       text-decoration: none;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
     .nav-logo span { color: var(--accent); }
+
+    /* ── Pill Nav ── */
+    .nav-pill-group {
+      display: flex;
+      align-items: center;
+      background: rgba(241, 241, 243, 0.85);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 100px;
+      padding: 0.25rem;
+      gap: 0;
+    }
+    .nav-pill-link {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 1rem;
+      border-radius: 100px;
+      text-decoration: none;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--muted);
+      white-space: nowrap;
+      transition: color 0.2s ease, background 0.2s ease;
+      position: relative;
+    }
+    .nav-pill-link:hover {
+      color: var(--ink);
+    }
+    .nav-pill-link .nav-num {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      opacity: 0.55;
+    }
+    .nav-pill-link.active {
+      background: var(--ink);
+      color: #fff;
+    }
+    .nav-pill-link.active .nav-num {
+      opacity: 0.55;
+      color: #fff;
+    }
+    @media (max-width: 640px) {
+      .nav-pill-group { display: none; }
+    }
 
     /* ── Hero ── */
     #hero {
@@ -324,8 +374,10 @@
       border-radius: 0;
       overflow: hidden;
       max-width: 100%;
+      min-height: 100vh;
     }
     .hero-wrap {
+      min-height: 100vh;
       padding-top: clamp(8rem, 14vw, 12rem);
       padding-bottom: clamp(6rem, 12vw, 10rem);
       padding-left: clamp(2rem, 8vw, 8rem);
@@ -333,6 +385,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       text-align: center;
     }
     .hero-text { display: flex; flex-direction: column; align-items: center; }
@@ -598,12 +651,84 @@
     .benefit-subtext {
       font-family: "Figtree", sans-serif;
       font-size: clamp(1.43rem, 1.17rem + 1.04vw, 1.82rem);
-      color: rgba(0,0,0,0.45);
+      color: var(--ink);
       margin-top: 1.5rem;
       max-width: 32rem;
       margin-left: auto;
       margin-right: auto;
       line-height: 1.6;
+    }
+
+    /* ── Collective Section ── */
+    .collective-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(3rem, 6vw, 6rem);
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .collective-grid { grid-template-columns: 1fr; }
+    }
+    .collective-carousel-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      overflow: hidden;
+      border-radius: 1.25rem;
+      background: #eeeef4;
+      padding: clamp(1.25rem, 3vw, 2rem);
+    }
+    .cc-row {
+      overflow: hidden;
+      mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+    }
+    .cc-track {
+      display: flex;
+      gap: 0.6rem;
+      width: max-content;
+    }
+    .cc-row--left  .cc-track { animation: cc-scroll-left  28s linear infinite; }
+    .cc-row--right .cc-track { animation: cc-scroll-right 28s linear infinite; }
+    @keyframes cc-scroll-left {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @keyframes cc-scroll-right {
+      from { transform: translateX(-50%); }
+      to   { transform: translateX(0); }
+    }
+    .cc-track:hover { animation-play-state: paused; }
+    .cc-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #fff;
+      border-radius: 0.875rem;
+      padding: 0.65rem 1rem 0.65rem 0.65rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .cc-avatar {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 0.5rem;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: var(--surface);
+    }
+    .cc-name {
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+    .cc-role {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
     }
 
     /* ── Portfolio Drag Carousel ── */
@@ -755,7 +880,18 @@
 <nav>
   <div class="container nav-inner">
     <a href="#" class="nav-logo">Brand Reimagine<sup style="font-size: 0.5em; letter-spacing: 0; vertical-align: super;">TM</sup></a>
-    <a href="#get-started" class="btn btn-dark" style="font-size: 0.875rem; padding: 0.65rem 1.375rem;">Get My Brand Identity →</a>
+    <div class="nav-pill-group" role="navigation" aria-label="Page sections">
+      <a href="#how-it-works" class="nav-pill-link" data-section="how-it-works">
+        <span class="nav-num">01</span> How it Works
+      </a>
+      <a href="#offer" class="nav-pill-link" data-section="offer">
+        <span class="nav-num">02</span> Deliverables
+      </a>
+      <a href="#portfolio" class="nav-pill-link" data-section="portfolio">
+        <span class="nav-num">03</span> Portfolio
+      </a>
+    </div>
+    <a href="#get-started" class="btn btn-dark" style="font-size: 0.875rem; padding: 0.52rem 1.375rem; flex-shrink: 0;">Get My Brand Identity →</a>
   </div>
 </nav>
 
@@ -776,7 +912,6 @@
 
       <div style="display: flex; flex-wrap: wrap; gap: 0.875rem; justify-content: center;" class="hero-anim" id="anim-ctas">
         <a href="#get-started" class="btn btn-dark">Get My Brand Identity →</a>
-        <a href="#portfolio" class="btn btn-ghost"><span style="color: #141414; position: relative; z-index: 10;">See Portfolio First</span></a>
       </div>
     </div>
 
@@ -911,7 +1046,7 @@
 
     <div class="offer-accordion will-animate">
 
-      <details>
+      <details name="deliverables">
         <summary>
           <span class="offer-accordion-title">Logo Redesign</span>
           <span class="offer-accordion-toggle">+</span>
@@ -921,17 +1056,17 @@
         </div>
       </details>
 
-      <details>
+      <details name="deliverables">
         <summary>
           <span class="offer-accordion-title">Brand Mockups</span>
           <span class="offer-accordion-toggle">+</span>
         </summary>
         <div class="offer-accordion-body">
-          <p class="t-body">Your new logo applied to real-world materials — business cards, social media templates, letterhead, signage, and more — so you can see exactly how your brand comes to life before you spend a dollar on production.</p>
+          <p class="t-body">We turn strategic insight into a brand that actually sticks. Starting with moodboards to define direction, we build a full identity system that's distinct, and scalable.</p>
         </div>
       </details>
 
-      <details>
+      <details name="deliverables">
         <summary>
           <span class="offer-accordion-title">Brand Presentation Deck</span>
           <span class="offer-accordion-toggle">+</span>
@@ -941,7 +1076,7 @@
         </div>
       </details>
 
-      <details>
+      <details name="deliverables">
         <summary>
           <span class="offer-accordion-title">Final Asset Package</span>
           <span class="offer-accordion-toggle">+</span>
@@ -1039,6 +1174,61 @@
 </section>
 
 
+<!-- ══ COLLECTIVE ═════════════════════════════════════════════════════════ -->
+<!-- section: collective -->
+<section id="collective" class="section-pad">
+  <div class="container">
+    <div class="collective-grid">
+
+      <!-- Left col: copy -->
+      <div class="collective-copy will-animate">
+        <p class="t-eyebrow" style="margin-bottom: 1.5rem;">Collective</p>
+        <h2 class="t-h2" style="margin-bottom: 1.5rem;">Small team.<br>Big outcomes.</h2>
+        <p style="font-size: clamp(1rem, 0.9rem + 0.35vw, 1.2rem); color: var(--muted); line-height: 1.65; max-width: 34rem;">
+          We bring the right people to the table. Senior-only, zero bloat. Strategy, design, and dev working like a unit.
+        </p>
+      </div>
+
+      <!-- Right col: carousel rows -->
+      <div class="collective-carousel-wrap will-animate">
+
+        <!-- Row 1 — scrolls left -->
+        <div class="cc-row cc-row--left">
+          <div class="cc-track" id="cc-track-1">
+            <!-- cards duplicated for seamless loop -->
+            <div class="cc-card"><img src="placeholder-hero-01.png" alt="" class="cc-avatar"><div><p class="cc-name">Emiliia Nerysnytsia</p><p class="cc-role">Senior Brand + Web Designer</p></div></div>
+            <div class="cc-card"><img src="placeholder-hero-02.png" alt="" class="cc-avatar"><div><p class="cc-name">Charlie Isslander</p><p class="cc-role">Senior Brand + Web Designer</p></div></div>
+            <div class="cc-card"><img src="placeholder-hero-03.png" alt="" class="cc-avatar"><div><p class="cc-name">Julian Fella</p><p class="cc-role">Lead Webflow Designer/Developer</p></div></div>
+            <div class="cc-card"><img src="placeholder-hero-04.png" alt="" class="cc-avatar"><div><p class="cc-name">Mia Hofmann</p><p class="cc-role">Brand Strategist</p></div></div>
+            <!-- duplicates -->
+            <div class="cc-card" aria-hidden="true"><img src="placeholder-hero-01.png" alt="" class="cc-avatar"><div><p class="cc-name">Emiliia Nerysnytsia</p><p class="cc-role">Senior Brand + Web Designer</p></div></div>
+            <div class="cc-card" aria-hidden="true"><img src="placeholder-hero-02.png" alt="" class="cc-avatar"><div><p class="cc-name">Charlie Isslander</p><p class="cc-role">Senior Brand + Web Designer</p></div></div>
+            <div class="cc-card" aria-hidden="true"><img src="placeholder-hero-03.png" alt="" class="cc-avatar"><div><p class="cc-name">Julian Fella</p><p class="cc-role">Lead Webflow Designer/Developer</p></div></div>
+            <div class="cc-card" aria-hidden="true"><img src="placeholder-hero-04.png" alt="" class="cc-avatar"><div><p class="cc-name">Mia Hofmann</p><p class="cc-role">Brand Strategist</p></div></div>
+          </div>
+        </div>
+
+        <!-- Row 2 — scrolls right -->
+        <div class="cc-row cc-row--right">
+          <div class="cc-track" id="cc-track-2">
+            <div class="cc-card"><img src="placeholder-hero-03.png" alt="" class="cc-avatar"><div><p class="cc-name">Luca Ferreira</p><p class="cc-role">Product Designer</p></div></div>
+            <div class="cc-card"><img src="placeholder-hero-04.png" alt="" class="cc-avatar"><div><p class="cc-name">Sara Okafor</p><p class="cc-role">UX Researcher</p></div></div>
+            <div class="cc-card"><img src="placeholder-hero-01.png" alt="" class="cc-avatar"><div><p class="cc-name">Tom Vreeland</p><p class="cc-role">Motion + Visual Designer</p></div></div>
+            <div class="cc-card"><img src="placeholder-hero-02.png" alt="" class="cc-avatar"><div><p class="cc-name">Nina Köhler</p><p class="cc-role">Senior Copywriter</p></div></div>
+            <!-- duplicates -->
+            <div class="cc-card" aria-hidden="true"><img src="placeholder-hero-03.png" alt="" class="cc-avatar"><div><p class="cc-name">Luca Ferreira</p><p class="cc-role">Product Designer</p></div></div>
+            <div class="cc-card" aria-hidden="true"><img src="placeholder-hero-04.png" alt="" class="cc-avatar"><div><p class="cc-name">Sara Okafor</p><p class="cc-role">UX Researcher</p></div></div>
+            <div class="cc-card" aria-hidden="true"><img src="placeholder-hero-01.png" alt="" class="cc-avatar"><div><p class="cc-name">Tom Vreeland</p><p class="cc-role">Motion + Visual Designer</p></div></div>
+            <div class="cc-card" aria-hidden="true"><img src="placeholder-hero-02.png" alt="" class="cc-avatar"><div><p class="cc-name">Nina Köhler</p><p class="cc-role">Senior Copywriter</p></div></div>
+          </div>
+        </div>
+
+      </div><!-- /.collective-carousel-wrap -->
+    </div><!-- /.collective-grid -->
+  </div>
+</section>
+
+
 <!-- ══ FAQ ════════════════════════════════════════════════════════════════ -->
 <!-- section: faq -->
 <section id="faq" class="section-pad">
@@ -1050,7 +1240,7 @@
 
     <div style="max-width: 50rem;" class="will-animate">
 
-      <details class="faq faq-row">
+      <details name="faq" class="faq faq-row">
         <summary style="display: flex; justify-content: space-between; align-items: center; gap: 1.25rem;">
           <span class="faq-q">"What if I don't like what you deliver?"</span>
           <span class="faq-toggle">+</span>
@@ -1058,7 +1248,7 @@
         <p class="faq-body">You're paying for professional judgment, not a guessing game. We start with a thorough brief that gives us everything we need to build a direction that fits your business. The work will be polished, considered, and appropriate for your industry. It may not be exactly what you would have dreamed up — it might be better.</p>
       </details>
 
-      <details class="faq faq-row">
+      <details name="faq" class="faq faq-row">
         <summary style="display: flex; justify-content: space-between; align-items: center; gap: 1.25rem;">
           <span class="faq-q">"Is this just a Canva template with my name on it?"</span>
           <span class="faq-toggle">+</span>
@@ -1066,7 +1256,7 @@
         <p class="faq-body">No. Everything is designed from scratch, specific to your business. Fixed scope doesn't mean low effort — it means a tight, streamlined process that cuts waste, not quality.</p>
       </details>
 
-      <details class="faq faq-row">
+      <details name="faq" class="faq faq-row">
         <summary style="display: flex; justify-content: space-between; align-items: center; gap: 1.25rem;">
           <span class="faq-q">"Why not just use Fiverr?"</span>
           <span class="faq-toggle">+</span>
@@ -1074,7 +1264,7 @@
         <p class="faq-body">You can. You'll get something fast and cheap, and it'll look fast and cheap. This is for businesses that want to look like they take themselves seriously — without paying agency rates to get there.</p>
       </details>
 
-      <details class="faq faq-row">
+      <details name="faq" class="faq faq-row">
         <summary style="display: flex; justify-content: space-between; align-items: center; gap: 1.25rem;">
           <span class="faq-q">"What if my business has a very specific vision?"</span>
           <span class="faq-toggle">+</span>
@@ -1082,7 +1272,7 @@
         <p class="faq-body">Most SMEs don't have a fully-formed visual direction — and that's fine. That's the point of hiring a designer. You fill out the brief, we do the thinking. If you genuinely have a detailed creative direction you need executed precisely, this probably isn't the right fit and we'd rather tell you that upfront.</p>
       </details>
 
-      <details class="faq faq-row">
+      <details name="faq" class="faq faq-row">
         <summary style="display: flex; justify-content: space-between; align-items: center; gap: 1.25rem;">
           <span class="faq-q">"What formats do I get?"</span>
           <span class="faq-toggle">+</span>
@@ -1090,7 +1280,7 @@
         <p class="faq-body">SVG, PNG, PDF, and color variations (full color, black, reversed). Organized and labeled. Ready for your printer, your web developer, your social media manager, and your future self.</p>
       </details>
 
-      <details class="faq faq-row">
+      <details name="faq" class="faq faq-row">
         <summary style="display: flex; justify-content: space-between; align-items: center; gap: 1.25rem;">
           <span class="faq-q">"How long does it take?"</span>
           <span class="faq-toggle">+</span>
@@ -1416,6 +1606,29 @@
 
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll();
+  })();
+</script>
+
+<script>
+  // Scroll-spy for pill nav
+  (function() {
+    const pillLinks = document.querySelectorAll('.nav-pill-link[data-section]');
+    const sectionIds = ['how-it-works', 'offer', 'portfolio'];
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    function updateActive() {
+      const scrollY = window.scrollY + window.innerHeight * 0.35;
+      let active = null;
+      for (const sec of sections) {
+        if (sec.offsetTop <= scrollY) active = sec.id;
+      }
+      pillLinks.forEach(link => {
+        link.classList.toggle('active', link.dataset.section === active);
+      });
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
   })();
 </script>
 
