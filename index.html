@@ -1599,55 +1599,56 @@
     const track = document.getElementById('portfolio-track');
     if (!outer || !track) return;
 
-    // Create cursor element in JS so it's always in DOM when this runs
+    // Create cursor pill in JS — guarantees it exists when this script runs
     const cursor = document.createElement('div');
     cursor.id = 'pf-cursor';
     cursor.setAttribute('aria-hidden', 'true');
-    cursor.innerHTML = '<div id="pf-cursor-pill">Drag or scroll&nbsp; →</div>';
+    cursor.innerHTML = '<div id="pf-cursor-pill">Drag or scroll &nbsp;→</div>';
     document.body.appendChild(cursor);
 
     let dragOffset = 0, velX = 0;
     let isDragging = false;
     let dragStartClient = 0, dragStartOffset = 0, lastClientX = 0;
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
     let isOverStrip = false;
 
     function pointerX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
 
-    // Single global mousemove: cursor tracking + drag
+    // Cursor follows mouse directly via transform (no ticker dependency)
     document.addEventListener('mousemove', e => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
+      // Position cursor directly — instant, no lerp needed
+      cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
 
+      // Show/hide based on strip bounds
       const rect = outer.getBoundingClientRect();
-      const over = mouseX >= rect.left && mouseX <= rect.right &&
-                   mouseY >= rect.top  && mouseY <= rect.bottom;
+      const over = e.clientX >= rect.left && e.clientX <= rect.right &&
+                   e.clientY >= rect.top  && e.clientY <= rect.bottom;
       if (over !== isOverStrip) {
         isOverStrip = over;
         cursor.style.opacity = over ? '1' : '0';
       }
 
+      // Drive drag
       if (!isDragging) return;
       velX = e.clientX - lastClientX;
       lastClientX = e.clientX;
       dragOffset = dragStartOffset + (e.clientX - dragStartClient);
     });
 
-    // GSAP ticker: momentum decay + cursor lerp
+    // GSAP ticker: momentum decay only (no cursor involved)
     gsap.ticker.add(() => {
-      if (!isDragging) {
-        velX *= 0.9;
-        dragOffset += velX;
-      }
+      if (isDragging) return;
+      velX *= 0.9;
+      dragOffset += velX;
       const minScroll = -(track.scrollWidth - outer.clientWidth);
       if (dragOffset > 0)         dragOffset += (0 - dragOffset) * 0.18;
       if (dragOffset < minScroll) dragOffset += (minScroll - dragOffset) * 0.18;
       track.style.transform = `translateX(${dragOffset}px)`;
+    });
 
-      cursorX += (mouseX - cursorX) * 0.14;
-      cursorY += (mouseY - cursorY) * 0.14;
-      cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+    // Also apply transform during active drag (not ticker-driven)
+    document.addEventListener('mousemove', () => {
+      if (!isDragging) return;
+      track.style.transform = `translateX(${dragOffset}px)`;
     });
 
     // Mouse drag
@@ -1679,6 +1680,7 @@
       velX = pointerX(e) - lastClientX;
       lastClientX = pointerX(e);
       dragOffset = dragStartOffset + (pointerX(e) - dragStartClient);
+      track.style.transform = `translateX(${dragOffset}px)`;
     }, { passive: true });
     window.addEventListener('touchend', () => { isDragging = false; });
   })();
