@@ -782,7 +782,6 @@
       overflow: hidden;
       cursor: none;
       user-select: none;
-      padding-left: var(--pad-x);
     }
     .portfolio-marquee-outer.dragging { cursor: none; }
 
@@ -793,42 +792,33 @@
       pointer-events: none;
       top: 0; left: 0;
       opacity: 0;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.18s ease;
       will-change: transform;
     }
     #pf-cursor-pill {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
       background: #141414;
       color: #fff;
       font-family: "Figtree", sans-serif;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      padding: 0.5rem 1.125rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      padding: 0.55rem 1.25rem;
       border-radius: 100px;
       white-space: nowrap;
       transform: translate(-50%, -50%);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-      transition: background 0.15s ease, transform 0.15s ease;
+      transition: transform 0.15s ease, background 0.15s ease;
     }
     #pf-cursor.is-dragging #pf-cursor-pill {
-      background: #333;
-      transform: translate(-50%, -50%) scale(0.94);
-    }
-    .pf-cursor-arrows {
-      display: flex;
-      gap: 0.2rem;
-      opacity: 0.7;
-      font-size: 0.75rem;
+      transform: translate(-50%, -50%) scale(0.92);
+      background: #2a2a2a;
     }
     .portfolio-marquee-track {
       display: flex;
       align-items: flex-end;
       gap: clamp(0.625rem, 1.2vw, 0.875rem);
       width: max-content;
-      padding-right: var(--pad-x);
     }
     .portfolio-card {
       flex-shrink: 0;
@@ -1607,37 +1597,35 @@
   (function () {
     const outer = document.querySelector('.portfolio-marquee-outer');
     const track = document.getElementById('portfolio-track');
-    const cursor = document.getElementById('pf-cursor');
     if (!outer || !track) return;
 
-    let dragOffset = 0;
-    let velX = 0;
-    let isDragging = false;
-    let dragStartClient = 0;
-    let dragStartOffset = 0;
-    let lastClientX = 0;
+    // Create cursor element in JS so it's always in DOM when this runs
+    const cursor = document.createElement('div');
+    cursor.id = 'pf-cursor';
+    cursor.setAttribute('aria-hidden', 'true');
+    cursor.innerHTML = '<div id="pf-cursor-pill">Drag or scroll&nbsp; →</div>';
+    document.body.appendChild(cursor);
 
-    // Cursor lerp state — initialise to centre of viewport
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let cursorX = mouseX;
-    let cursorY = mouseY;
+    let dragOffset = 0, velX = 0;
+    let isDragging = false;
+    let dragStartClient = 0, dragStartOffset = 0, lastClientX = 0;
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
     let isOverStrip = false;
 
     function pointerX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
 
-    // Global mouse tracker — drives both drag and cursor
+    // Single global mousemove: cursor tracking + drag
     document.addEventListener('mousemove', e => {
       mouseX = e.clientX;
       mouseY = e.clientY;
 
-      // Show/hide cursor based on whether mouse is over the strip
       const rect = outer.getBoundingClientRect();
-      const over = e.clientX >= rect.left && e.clientX <= rect.right &&
-                   e.clientY >= rect.top  && e.clientY <= rect.bottom;
+      const over = mouseX >= rect.left && mouseX <= rect.right &&
+                   mouseY >= rect.top  && mouseY <= rect.bottom;
       if (over !== isOverStrip) {
         isOverStrip = over;
-        if (cursor) cursor.style.opacity = over ? '1' : '0';
+        cursor.style.opacity = over ? '1' : '0';
       }
 
       if (!isDragging) return;
@@ -1646,23 +1634,20 @@
       dragOffset = dragStartOffset + (e.clientX - dragStartClient);
     });
 
-    // GSAP ticker: momentum + cursor lerp
+    // GSAP ticker: momentum decay + cursor lerp
     gsap.ticker.add(() => {
-      // Momentum after release
       if (!isDragging) {
         velX *= 0.9;
         dragOffset += velX;
       }
-      // Soft-clamp at edges
       const minScroll = -(track.scrollWidth - outer.clientWidth);
       if (dragOffset > 0)         dragOffset += (0 - dragOffset) * 0.18;
       if (dragOffset < minScroll) dragOffset += (minScroll - dragOffset) * 0.18;
       track.style.transform = `translateX(${dragOffset}px)`;
 
-      // Lerp cursor toward mouse
       cursorX += (mouseX - cursorX) * 0.14;
       cursorY += (mouseY - cursorY) * 0.14;
-      if (cursor) cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+      cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
     });
 
     // Mouse drag
@@ -1673,12 +1658,12 @@
       lastClientX = e.clientX;
       velX = 0;
       outer.classList.add('dragging');
-      if (cursor) cursor.classList.add('is-dragging');
+      cursor.classList.add('is-dragging');
     });
     window.addEventListener('mouseup', () => {
       isDragging = false;
       outer.classList.remove('dragging');
-      if (cursor) cursor.classList.remove('is-dragging');
+      cursor.classList.remove('is-dragging');
     });
 
     // Touch drag
@@ -1688,7 +1673,6 @@
       dragStartOffset = dragOffset;
       lastClientX = dragStartClient;
       velX = 0;
-      outer.classList.add('dragging');
     }, { passive: true });
     window.addEventListener('touchmove', e => {
       if (!isDragging) return;
@@ -1696,10 +1680,7 @@
       lastClientX = pointerX(e);
       dragOffset = dragStartOffset + (pointerX(e) - dragStartClient);
     }, { passive: true });
-    window.addEventListener('touchend', () => {
-      isDragging = false;
-      outer.classList.remove('dragging');
-    });
+    window.addEventListener('touchend', () => { isDragging = false; });
   })();
 
   /* ── Scroll-reveal: grey → black word by word ── */
@@ -1764,14 +1745,6 @@
   })();
 </script>
 
-<!-- Portfolio pill cursor -->
-<div id="pf-cursor" aria-hidden="true">
-  <div id="pf-cursor-pill">
-    <span class="pf-cursor-arrows">←</span>
-    Drag to scroll
-    <span class="pf-cursor-arrows">→</span>
-  </div>
-</div>
 
 </body>
 </html>
