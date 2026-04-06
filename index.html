@@ -1617,15 +1617,38 @@
     let dragStartOffset = 0;
     let lastClientX = 0;
 
-    // Smooth cursor lerp
-    let cursorTargetX = 0, cursorTargetY = 0;
-    let cursorX = 0, cursorY = 0;
+    // Cursor lerp state — initialise to centre of viewport
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let cursorX = mouseX;
+    let cursorY = mouseY;
+    let isOverStrip = false;
 
     function pointerX(e) { return e.touches ? e.touches[0].clientX : e.clientX; }
 
-    // GSAP ticker: momentum decay + cursor lerp
+    // Global mouse tracker — drives both drag and cursor
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+
+      // Show/hide cursor based on whether mouse is over the strip
+      const rect = outer.getBoundingClientRect();
+      const over = e.clientX >= rect.left && e.clientX <= rect.right &&
+                   e.clientY >= rect.top  && e.clientY <= rect.bottom;
+      if (over !== isOverStrip) {
+        isOverStrip = over;
+        if (cursor) cursor.style.opacity = over ? '1' : '0';
+      }
+
+      if (!isDragging) return;
+      velX = e.clientX - lastClientX;
+      lastClientX = e.clientX;
+      dragOffset = dragStartOffset + (e.clientX - dragStartClient);
+    });
+
+    // GSAP ticker: momentum + cursor lerp
     gsap.ticker.add(() => {
-      // Momentum
+      // Momentum after release
       if (!isDragging) {
         velX *= 0.9;
         dragOffset += velX;
@@ -1634,40 +1657,23 @@
       const minScroll = -(track.scrollWidth - outer.clientWidth);
       if (dragOffset > 0)         dragOffset += (0 - dragOffset) * 0.18;
       if (dragOffset < minScroll) dragOffset += (minScroll - dragOffset) * 0.18;
-
       track.style.transform = `translateX(${dragOffset}px)`;
 
-      // Smooth cursor follow
-      if (cursor) {
-        cursorX += (cursorTargetX - cursorX) * 0.16;
-        cursorY += (cursorTargetY - cursorY) * 0.16;
-        cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
-      }
+      // Lerp cursor toward mouse
+      cursorX += (mouseX - cursorX) * 0.14;
+      cursorY += (mouseY - cursorY) * 0.14;
+      if (cursor) cursor.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
     });
-
-    // Cursor visibility + tracking
-    outer.addEventListener('mousemove', e => {
-      cursorTargetX = e.clientX;
-      cursorTargetY = e.clientY;
-    });
-    outer.addEventListener('mouseenter', () => { if (cursor) cursor.style.opacity = '1'; });
-    outer.addEventListener('mouseleave', () => { if (cursor) cursor.style.opacity = '0'; });
 
     // Mouse drag
     outer.addEventListener('mousedown', e => {
       isDragging = true;
-      dragStartClient = pointerX(e);
+      dragStartClient = e.clientX;
       dragStartOffset = dragOffset;
-      lastClientX = dragStartClient;
+      lastClientX = e.clientX;
       velX = 0;
       outer.classList.add('dragging');
       if (cursor) cursor.classList.add('is-dragging');
-    });
-    window.addEventListener('mousemove', e => {
-      if (!isDragging) return;
-      velX = pointerX(e) - lastClientX;
-      lastClientX = pointerX(e);
-      dragOffset = dragStartOffset + (pointerX(e) - dragStartClient);
     });
     window.addEventListener('mouseup', () => {
       isDragging = false;
